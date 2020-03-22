@@ -1,11 +1,12 @@
 
 ##***************************(@MEFWRIT)**************************##
 ##***************************************************************##  
-## This is the Vaccn project - a tentative PNAS paper Fiagbenu & Troia, 2021 :-)
+##   This is the Vaccn project - a tentative PNAS paper            ##
+##  Fiagbenu & Troia, 2021 :-)
 ## This script begins the analysis proper
 ## 
 ## 19Nov 2016 ###@Michael Edem Fiagbenu wrote it (@MEFWRIT)
-
+##                           ##
 ##***************************(@MEFWRIT)***************************##
 ##****************************************************************##  
 
@@ -18,7 +19,7 @@
 rm(list = ls()) # clear workspace
 set.seed(282018) ## for replication
 cat("\f") # cat("\014") clear console
-x<-c("data.table","psych", "haven","tidyverse","naniar", "tibble","janitor","foreign","readxl","gdata")  ## load packages
+x<-c("data.table","psych", "haven","tidyverse","naniar", "tibble","janitor","foreign","readxl","gdata","mlma")  ## load packages
 lapply(x, require, character.only = TRUE)
 setwd("~/Dropbox/Projects/Jena/vaccine/vaccine/data/")
 source("corstarsl.R")   #### for correlation table 
@@ -30,25 +31,26 @@ colMin <- function(data) sapply(data, min, na.rm = T)  ## find the min value in 
 
 
 ## read/load in the clean data
-WelcomeData = read_csv("clean_welcomeDat.csv")  
+WelcomeData = read_csv("clean_grplvl_welcomeDat.csv")  
+#WelcomeData = read_csv("clean_indlvel_welcomeDat.csv")  
 
 glimpse(WelcomeData)
+table(WelcomeData$Disease_Sci_Q3)
 
 ## now lets select some variables of interest and explore some correlations
 names(WelcomeData)
 
-WelcomeData_select <- subset(WelcomeData, select = c(Religion_D1,HDI_2018,Mean_Schooling_2018,Education,
-                                              
-                                              WGM_Index,Trust_Science_Q12,
-                                              Vaccn_RiskPercep_Q25,Vaccn_Knowledge_Effktv_Q26,Vaccn_Knowledge_Heard_Vaccn_Q23,
-                                              Vaccn_Knowledge_Child_Q24,
-                                              Accept_Vaccn_4Child_Q28 ))
+WelcomeData_select <- subset(WelcomeData, select = c(Religion_D1,HDI_2018,Mean_Schooling_2018,SciRelig_disag_Q29,Sci_Relig_choose_Q30,Disease_Sci_Q3,Trust_UniScientists,
+                                                     Education,Science_Education,Science_Literacy, Trust_Science_Q12,WGM_Index,Trust_CompnyScientists,
+                                                     Vaccn_RiskPercep_Q25,Vaccn_Knowledge_Effktv_Q26,Vaccn_Knowledge_Heard_Vaccn_Q23,
+                                                     Vaccn_Knowledge_Child_Q24,
+                                                     Accept_Vaccn_4Child_Q28 ))
 
 
 ###### Fears average #########
-Fears_Ratings.keys.list = make.keys(WelcomeData_select, list( Religiosity = "Religion_D1",HDI_2018 ="HDI_2018",Mean_Schooling_2018 ="Mean_Schooling_2018",
-                                                        Education = "Education",
-                                                        WGM_Index ="WGM_Index",Trust_Science_Q12="Trust_Science_Q12",
+Fears_Ratings.keys.list = make.keys(WelcomeData_select, list( Sci_Relig_choose_Q30 = "Sci_Relig_choose_Q30",Religiosity = "Religion_D1",HDI_2018 ="HDI_2018",Mean_Schooling_2018 ="Mean_Schooling_2018",
+                                                        Education = "Education",Science_Education="Science_Education",Science_Literacy="Science_Literacy",Disease_Sci_Q3 ="Disease_Sci_Q3",
+                                                        WGM_Index ="WGM_Index",Trust_UniScientists = "Trust_UniScientists",Trust_CompnyScientists= "Trust_CompnyScientists", Trust_Science_Q12="Trust_Science_Q12",
                                                         Vaccn_RiskPercep_Q25="Vaccn_RiskPercep_Q25",Vaccn_Knowledge_Effktv_Q26="Vaccn_Knowledge_Effktv_Q26",
                                                         Vaccn_Knowledge_Heard_Vaccn_Q23 ="Vaccn_Knowledge_Heard_Vaccn_Q23",
                                                         Vaccn_Knowledge_Child_Q24="Vaccn_Knowledge_Child_Q24",
@@ -73,4 +75,6 @@ qq_Fears$N = nrow(Fears_scores)
 
 
 ### explore some descript stats
+
+
 
